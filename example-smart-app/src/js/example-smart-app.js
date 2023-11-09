@@ -61,6 +61,16 @@
           p.ldl = getQuantityValueAndUnit(ldl[0]);
 
           ret.resolve(p);
+
+          var med = smart.patient.api.fetchAll({
+            type: 'MedicationOrder', // Use 'MedicationOrder' for DSTU2
+          });
+          $.when(pt, obv, med).done(function(patient, obv, med) {
+            console.log(med);
+          });
+          
+          $.when(pt, obv, med).fail(onError);
+          
         });
       } else {
         onError();
