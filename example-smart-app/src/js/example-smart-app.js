@@ -173,6 +173,7 @@
     $('#ldl').html(p.ldl);
     $('#hdl').html(p.hdl);
 
+    console.log(p.interactingDrugs);
     p.medicationOrders.forEach(function(medicationOrder) {
       var medicationName = medicationOrder.medicationCodeableConcept.text;
       var medicationQuantity = medicationOrder.dispenseRequest.quantity.value + ' ' + medicationOrder.dispenseRequest.quantity.unit.replace(/{|}/g, '');
