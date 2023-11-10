@@ -142,7 +142,9 @@
       var medicationName = medicationOrder.medicationCodeableConcept.text;
       var dosage = medicationOrder.dosageInstruction[0].doseQuantity.value;
       var direction = medicationOrder.dosageInstruction[0].text;
-  
+      console.log(medicationName);
+      console.log(dosage);
+      console.log(direction);
       var html = `
         <tr>
           <td>${medicationName}</td>
