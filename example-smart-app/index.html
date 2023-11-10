@@ -4,8 +4,8 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge' />
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <title>Medication-SMART-App-stevelg</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-beta1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-beta1/js/bootstrap.bundle.min.js"></script>
     <link rel='stylesheet' type='text/css' href='./src/css/example-smart-app.css'>
     <!--
       Temporarily disable cerner-smart-embeddable-lib
@@ -20,23 +20,21 @@
       <div class="bounce2"></div>
       <div class="bounce3"></div>
     </div>
-    <div>Name: <span id="fullname"></span></div>
-    <script>
-      document.getElementById('fullname').textContent = document.getElementById('fname').textContent + " " + document.getElementById('lname').textContent;
-    </script>
-    <ul class="nav nav-tabs">
+
+    <div>Patient: <span id="fullname"></span></div>
+
+    <ul class="nav nav-pills nav-fill">
       <li class="nav-item">
-        <a class="nav-link active" href="#Medication" data-toggle="tab">Medication</a>
+        <a class="nav-link active" aria-current="page" href="#Medication">Medication</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#Calendar" data-toggle="tab">Calendar</a>
+        <a class="nav-link" href="#Calendar">Drug Interaction</a>
       </li>
     </ul>
     
     <div class="tab-content">
       <div id="Medication" class="tab-pane fade show active">
         <div id='holder' >
-          <h2>Medication</h2>
           <table id="medicationTable" class="table table-striped">
             <tr>
               <th>Medication</th>

@@ -129,6 +129,7 @@
     $('#loading').hide();
     $('#fname').html(p.fname); 
     $('#lname').html(p.lname);
+    $('#fullname').html(p.fname + ' ' + p.lname);
     $('#gender').html(p.gender);
     $('#birthdate').html(p.birthdate);
     $('#height').html(p.height);
