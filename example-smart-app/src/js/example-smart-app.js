@@ -70,6 +70,7 @@
           });
           console.log(prescribedMedication);
           
+          console.log('before drugPairs');
           // Get list of drug pairs for currently prescribed medication
           var drugPairs = [];
           for (let i = 0; i < prescribedDrugs.length; i++) {
@@ -80,11 +81,11 @@
           console.log(drugPairs);
 
           let interactingDrugs = [];
-
+          console.log('before for loop');
           // Check for drug interactions
           for (let pair of drugPairs) {
             let response = await fetch(`https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis=${pair[0]}+${pair[1]}`);
-          
+            console.log(response)
             if (response.ok) {
               let data = await response.json();
           
