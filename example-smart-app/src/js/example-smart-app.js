@@ -21,10 +21,12 @@
                       }
                     }
                   });
+        var med = smart.patient.api.fetchAll({
+          type: 'MedicationOrder', // Use 'MedicationOrder' for DSTU2
+        });
+        $.when(pt, obv, med).fail(onError);
 
-        $.when(pt, obv).fail(onError);
-
-        $.when(pt, obv).done(function(patient, obv) {
+        $.when(pt, obv, med).done(function(patient, obv, med) {
           var byCodes = smart.byCodes(obv, 'code');
           var gender = patient.gender;
 
@@ -60,17 +62,13 @@
           p.hdl = getQuantityValueAndUnit(hdl[0]);
           p.ldl = getQuantityValueAndUnit(ldl[0]);
 
+          p.medicationOrders = med;
+
           ret.resolve(p);
 
-          var med = smart.patient.api.fetchAll({
-            type: 'MedicationOrder', // Use 'MedicationOrder' for DSTU2
-          });
-          $.when(pt, obv, med).done(function(patient, obv, med) {
-            console.log(med);
-          });
           
+
           $.when(pt, obv, med).fail(onError);
-          
         });
       } else {
         onError();
@@ -93,6 +91,10 @@
       diastolicbp: {value: ''},
       ldl: {value: ''},
       hdl: {value: ''},
+      medicationOrders: {value: []},
+      // medicationName: {value: ''},
+      // medicationDose: {value: ''},
+      // meduicationDirection: {value: ''},
     };
   }
 
@@ -127,7 +129,7 @@
   window.drawVisualization = function(p) {
     $('#holder').show();
     $('#loading').hide();
-    $('#fname').html(p.fname);
+    $('#fname').html(p.fname); 
     $('#lname').html(p.lname);
     $('#gender').html(p.gender);
     $('#birthdate').html(p.birthdate);
@@ -136,6 +138,21 @@
     $('#diastolicbp').html(p.diastolicbp);
     $('#ldl').html(p.ldl);
     $('#hdl').html(p.hdl);
+    p.medicationOrders.forEach(function(medicationOrder) {
+      var medicationName = medicationOrder.medicationCodeableConcept.text;
+      var dosage = medicationOrder.dosageInstruction[0].doseQuantity.value;
+      var direction = medicationOrder.dosageInstruction[0].text;
+  
+      var html = `
+        <tr>
+          <td>${medicationName}</td>
+          <td>${dosage}</td>
+          <td>${direction}</td>
+        </tr>
+      `;
+  
+      $('#medicationTable').append(html);
+    });
   };
 
 })(window);
