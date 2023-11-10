@@ -45,6 +45,8 @@
           var ldl = byCodes('2089-1');
 
           var p = defaultPatient();
+          p.medicationOrders = med;
+          console.log(med);
           p.birthdate = patient.birthDate;
           p.gender = gender;
           p.fname = fname;
@@ -62,7 +64,6 @@
           p.hdl = getQuantityValueAndUnit(hdl[0]);
           p.ldl = getQuantityValueAndUnit(ldl[0]);
 
-          p.medicationOrders = med;
 
           ret.resolve(p);
 
@@ -138,6 +139,8 @@
     $('#diastolicbp').html(p.diastolicbp);
     $('#ldl').html(p.ldl);
     $('#hdl').html(p.hdl);
+    console.log(p.medicationOrders);
+
     p.medicationOrders.forEach(function(medicationOrder) {
       var medicationName = medicationOrder.medicationCodeableConcept.text;
       var dosage = medicationOrder.dosageInstruction[0].doseQuantity.value;
