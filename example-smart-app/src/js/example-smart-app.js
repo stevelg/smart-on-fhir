@@ -93,9 +93,6 @@
       ldl: {value: ''},
       hdl: {value: ''},
       medicationOrders: {value: []},
-      // medicationName: {value: ''},
-      // medicationDose: {value: ''},
-      // meduicationDirection: {value: ''},
     };
   }
 
@@ -139,15 +136,12 @@
     $('#diastolicbp').html(p.diastolicbp);
     $('#ldl').html(p.ldl);
     $('#hdl').html(p.hdl);
-    console.log(p.medicationOrders);
 
     p.medicationOrders.forEach(function(medicationOrder) {
       var medicationName = medicationOrder.medicationCodeableConcept.text;
       var dosage = medicationOrder.dosageInstruction[0].doseQuantity.value;
       var direction = medicationOrder.dosageInstruction[0].text;
-      console.log(medicationName);
-      console.log(dosage);
-      console.log(direction);
+
       var html = `
         <tr>
           <td>${medicationName}</td>
@@ -155,7 +149,6 @@
           <td>${direction}</td>
         </tr>
       `;
-  
       $('#medicationTable').append(html);
     });
   };
