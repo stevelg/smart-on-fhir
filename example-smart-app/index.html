@@ -3,8 +3,9 @@
   <head>
     <meta http-equiv='X-UA-Compatible' content='IE=edge' />
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-    <title>Example-SMART-App-stevelg</title>
-
+    <title>Medication-SMART-App-stevelg</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel='stylesheet' type='text/css' href='./src/css/example-smart-app.css'>
     <!--
       Temporarily disable cerner-smart-embeddable-lib
@@ -19,55 +20,38 @@
       <div class="bounce2"></div>
       <div class="bounce3"></div>
     </div>
-    <div class="tab">
-      <button class="tablinks" onclick="openTab(event, 'Medication')">Medication</button>
-      <button class="tablinks" onclick="openTab(event, 'Calendar')">Calendar</button>
-    </div>
+    <div>Name: <span id="fullname"></span></div>
+    <script>
+      document.getElementById('fullname').textContent = document.getElementById('fname').textContent + " " + document.getElementById('lname').textContent;
+    </script>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" href="#Medication" data-toggle="tab">Medication</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#Calendar" data-toggle="tab">Calendar</a>
+      </li>
+    </ul>
     
-    <div id="Medication" class="tabcontent">
-      <div id='holder' >
-        <h2>SMART-App</h2>
-        <div>Name: <span id="fullname"></span></div>
-        <script>
-          document.getElementById('fullname').textContent = document.getElementById('fname').textContent + " " + document.getElementById('lname').textContent;
-        </script>
-        
-        <h2>Medication Resource</h2>
-        <table id="medicationTable">
-          <tr>
-            <th>Medication</th>
-            <th>Quantity</th>
-            <th>Direction</th>
-            <th>Duration</th>
-          </tr>
-        </table>
+    <div class="tab-content">
+      <div id="Medication" class="tab-pane fade show active">
+        <div id='holder' >
+          <h2>Medication</h2>
+          <table id="medicationTable" class="table table-striped">
+            <tr>
+              <th>Medication</th>
+              <th>Quantity</th>
+              <th>Direction</th>
+              <th>Duration</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="Calendar" class="tab-pane fade">
+        <div>Calendar</div>
       </div>
     </div>
-    
-    <div id="Calendar" class="tabcontent">
-      <h2>Calendar</h2>
-    </div>
-    
-    <script>
-    function openTab(evt, tabName) {
-      var i, tabcontent, tablinks;
-      tabcontent = document.getElementsByClassName("tabcontent");
-      for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-      }
-      tablinks = document.getElementsByClassName("tablinks");
-      for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-      }
-      document.getElementById(tabName).style.display = "block";
-      evt.currentTarget.className += " active";
-    }
-    
-    // Get the element with id="defaultOpen" and click on it
-    document.getElementById("defaultOpen").click();
-    </script>
 
-    
     <!-- Required JS files to enable this page to embed within an MPage -->
     <!--
       Temporarily disable cerner-smart-embeddable-lib

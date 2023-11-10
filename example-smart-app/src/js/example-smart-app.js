@@ -139,9 +139,9 @@
 
     p.medicationOrders.forEach(function(medicationOrder) {
       var medicationName = medicationOrder.medicationCodeableConcept.text;
-      var medicationQuantity = medicationOrder.dosageInstruction[0].doseQuantity.value + ' ' + medicationOrder.dosageInstruction[0].doseQuantity.unit;
+      var medicationQuantity = medicationOrder.dispenseRequest.quantity.value + ' ' + medicationOrder.dispenseRequest.quantity.unit.replace(/{|}/g, '');
       var medicationDirection = medicationOrder.dosageInstruction[0].text;
-      var medicationDuration = medicationOrder.dispenseRequest.expectedSupplyDuration.value + ' ' + medicationOrder.dispenseRequest.expectedSupplyDuration.unit;
+      var medicationDuration = medicationOrder.dispenseRequest.expectedSupplyDuration.value + ' ' + medicationOrder.dispenseRequest.expectedSupplyDuration.unit.replace(/{|}/g, '');
 
       var html = `
         <tr>
