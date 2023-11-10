@@ -112,6 +112,7 @@
     <!-- https://github.com/cerner/fhir-client-cerner-additions -->
     <script src='./lib/js/fhir-client-cerner-additions-1.0.0.js'></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       extractData().then(
         //Display Patient Demographics and Observations if extractData was success
@@ -125,17 +126,6 @@
           $('#errors').html('<p> Failed to call FHIR Service </p>');
         }
       );
-    </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-      $(function () {
-        $('.nav-pills a').on('click', function (e) {
-          e.preventDefault()
-          $(this).tab('show')
-        })
-      })
     </script>
   </body>
 </html>
