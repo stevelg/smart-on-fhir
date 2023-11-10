@@ -26,7 +26,7 @@
         });
         $.when(pt, obv, med).fail(onError);
 
-        $.when(pt, obv, med).done(async function(patient, obv, med) {
+        $.when(pt, obv, med).done(function(patient, obv, med) {
           var byCodes = smart.byCodes(obv, 'code');
           var gender = patient.gender;
 
@@ -84,10 +84,10 @@
           console.log('before for loop');
           // Check for drug interactions
           for (let pair of drugPairs) {
-            let response = await fetch(`https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis=${pair[0]}+${pair[1]}`);
+            let response = fetch(`https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis=${pair[0]}+${pair[1]}`);
             console.log(response)
             if (response.ok) {
-              let data = await response.json();
+              let data = response.json();
           
               if (data.fullInteractionTypeGroup) {
                 interactingDrugs.push(pair);
@@ -97,6 +97,7 @@
           }
           console.log(interactingDrugs);
           console.log(p.interactingDrugs);
+          
           ret.resolve(p);
 
           
