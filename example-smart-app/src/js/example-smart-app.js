@@ -26,7 +26,7 @@
         });
         $.when(pt, obv, med).fail(onError);
 
-        $.when(pt, obv, med).done(function(patient, obv, med) {
+        $.when(pt, obv, med).done(async function(patient, obv, med) {
           var byCodes = smart.byCodes(obv, 'code');
           var gender = patient.gender;
 
@@ -64,13 +64,46 @@
           p.hdl = getQuantityValueAndUnit(hdl[0]);
           p.ldl = getQuantityValueAndUnit(ldl[0]);
 
+          // Get list of prescribed medication
+          med.forEach(function(medicationOrder) {
+          prescribedMedication.push(medicationOrder.medicationCodeableConcept.coding.code);
+          });
+          console.log(prescribedMedication);
+          
+          // Get list of drug pairs for currently prescribed medication
+          var drugPairs = [];
+          for (let i = 0; i < prescribedDrugs.length; i++) {
+            for (let j = i + 1; j < prescribedDrugs.length; j++) {
+              drugPairs.push([prescribedDrugs[i], prescribedDrugs[j]]);
+            }
+          }
+          console.log(drugPairs);
 
+          let interactingDrugs = [];
+
+          // Check for drug interactions
+          for (let pair of drugPairs) {
+            let response = await fetch(`https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis=${pair[0]}+${pair[1]}`);
+          
+            if (response.ok) {
+              let data = await response.json();
+          
+              if (data.fullInteractionTypeGroup) {
+                interactingDrugs.push(pair);
+                p.interactingDrugs.push(data.fullInteractionTypeGroup[0].fullInteractionType[0].interactionPair[0].description);
+              }
+            }
+          }
+          console.log(interactingDrugs);
+          console.log(p.interactingDrugs);
           ret.resolve(p);
 
           
 
           $.when(pt, obv, med).fail(onError);
         });
+
+
       } else {
         onError();
       }
@@ -93,6 +126,8 @@
       ldl: {value: ''},
       hdl: {value: ''},
       medicationOrders: {value: []},
+      prescribedMedication: {value: []},
+      interactingDrugs: {value: []}
     };
   }
 

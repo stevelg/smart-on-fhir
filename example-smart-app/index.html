@@ -54,7 +54,12 @@
         <button class="nav-link active" id="med-tab" data-bs-toggle="tab" data-bs-target="#med" type="button" role="tab" aria-controls="med" aria-selected="true">Medication</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="interaction-tab" data-bs-toggle="tab" data-bs-target="#interaction" type="button" role="tab" aria-controls="interaction" aria-selected="false">Interaction</button>
+        <button class="nav-link position-relative" id="interaction-tab" data-bs-toggle="tab" data-bs-target="#interaction" type="button" role="tab" aria-controls="interaction" aria-selected="false">
+          Interaction
+          <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+            <span class="visually-hidden">New alerts</span>
+          </span>
+        </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
