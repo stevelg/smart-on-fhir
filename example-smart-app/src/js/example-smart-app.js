@@ -139,15 +139,17 @@
 
     p.medicationOrders.forEach(function(medicationOrder) {
       var medicationName = medicationOrder.medicationCodeableConcept.text;
-      var dosage = medicationOrder.dosageInstruction[0].doseQuantity.value;
-      var direction = medicationOrder.dosageInstruction[0].text;
+      var medicationQuantity = medicationOrder.dosageInstruction[0].doseQuantity.value + ' ' + medicationOrder.dosageInstruction[0].doseQuantity.unit;
+      var medicationDirection = medicationOrder.dosageInstruction[0].text;
+      var medicationDuration = medicationOrder.dispenseRequest.expectedSupplyDuration.value + ' ' + medicationOrder.dispenseRequest.expectedSupplyDuration.unit;
 
       var html = `
         <tr>
           <td>${medicationName}</td>
-          <td>${dosage}</td>
-          <td>${direction}</td>
-        </tr>
+          <td>${medicationQuantity}</td>
+          <td>${medicationDirection}</td>
+          <td>${medicationDuration}</td>
+          </tr>
       `;
       $('#medicationTable').append(html);
     });
