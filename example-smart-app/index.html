@@ -22,48 +22,22 @@
 
     <h1>Patient: <span id="fullname"></span></h1>
 
-    <!-- <ul class="nav nav-pills nav-fill">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#Medication">Medication</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#Interaction">Drug Interaction</a>
-      </li>
-    </ul>
-    
-
-    <div class="tab-content">
-      <div class="tab-pane fade show active" id="Medication" role="tabpanel" aria-labelledby="medication-tab">
-        <table id="medicationTable" class="table table-striped">
-          <tr>
-            <th>Medication</th>
-            <th>Quantity</th>
-            <th>Direction</th>
-            <th>Duration</th>
-          </tr>
-        </table>
-      </div>
-      <div class="tab-pane fade" id="Interaction" role="tabpanel" aria-labelledby="interaction-tab">Interaction</div>
-      <div class="tab-pane fade" id="Unused1" role="tabpanel" aria-labelledby="messages-tab">Unused</div>
-      <div class="tab-pane fade" id="Unused2" role="tabpanel" aria-labelledby="settings-tab">Unused</div>
-    </div> -->
-
-
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="med-tab" data-bs-toggle="tab" data-bs-target="#med" type="button" role="tab" aria-controls="med" aria-selected="true">Medication</button>
       </li>
       <li class="nav-item" role="presentation">
+        <button class="nav-link" id="past-med-tab" data-bs-toggle="tab" data-bs-target="#past-med" type="button" role="tab" aria-controls="past-med" aria-selected="false">Past Medication</button>
+      </li>
+      <li class="nav-item" role="presentation">
         <button class="nav-link position-relative" id="interaction-tab" data-bs-toggle="tab" data-bs-target="#interaction" type="button" role="tab" aria-controls="interaction" aria-selected="false">
           Interaction
-          <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+          <span id="interactionBadge" class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
             <span class="visually-hidden">New alerts</span>
           </span>
         </button>
       </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
-      </li>
+
     </ul>
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="med" role="tabpanel" aria-labelledby="med-tab">
@@ -76,29 +50,18 @@
           </tr>
         </table>
       </div>
+      <div class="tab-pane fade" id="past-med" role="tabpanel" aria-labelledby="past-med-tab">
+        <table id="pastMedTable" class="table table-striped">
+          <tr>
+            <th>Medication</th>
+            <th>Expiered On</th>
+          </tr>
+        </table>
+      </div>
       <div class="tab-pane fade" id="interaction" role="tabpanel" aria-labelledby="interaction-tab">
-        <h1>DRUG INTERACTION</h1>
-      </div>
-      <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+        <ul id="interactionList"></ul>
+      </div>    
     </div>
-
-    <!-- <div class="tab-content">
-      <div id="Medication" class="tab-pane fade show active">
-        <div id='holder' >
-          <table id="medicationTable" class="table table-striped">
-            <tr>
-              <th>Medication</th>
-              <th>Quantity</th>
-              <th>Direction</th>
-              <th>Duration</th>
-            </tr>
-          </table>
-        </div>
-      </div>
-      <div id="Interaction" class="tab-pane fade">
-        <div>Interaction</div>
-      </div>
-    </div> -->
 
     <!-- Required JS files to enable this page to embed within an MPage -->
     <!--
