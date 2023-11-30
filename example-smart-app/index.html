@@ -5,6 +5,7 @@
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <title>Medication-SMART-App-stevelg</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
     <link rel='stylesheet' type='text/css' href='./src/css/example-smart-app.css'>
     <!--
       Temporarily disable cerner-smart-embeddable-lib
@@ -20,15 +21,76 @@
       <div class="bounce3"></div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Add Medication</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="medication-order-form">
+              <input type="hidden" id="rxcui-field" name="rxcui">
+
+              <label for="drug" class="form-label">Drug:</label>
+              <input type="text" class="form-control" id="drug" name="drug" class="w-100" required readonly>
+              <br>
+              <label for="patientID" class="form-label">Patient ID:</label>
+              <input type="text" class="form-control" id="patientID" name="patientID" class="w-100" required readonly>
+              <br>
+              <label for="start-date" class="form-label">Start Date:</label>
+              <input type="date" class="form-control" id="start-date" name="start-date" class="w-100" required>
+              <br>
+              <label for="dispense-quantity" class="form-label">Dispense Quantity:</label>
+              <input type="number" class="form-control" id="dispense-quantity" name="dispense-quantity" class="w-100" required min="1">
+              <br>
+              <label for="dose-quantity" class="form-label">Dose Quantity:</label>
+              <input type="number" class="form-control" id="dose-quantity" name="dose-quantity" class="w-100" required min="1">
+              <br>
+              <label for="dose-unit" class="form-label">Dose Unit:</label>
+              <input type="text" class="form-control" id="dose-unit" name="dose-unit" class="w-100" required min="1">
+              <br>
+              <label for="frequency" class="form-label">Dose Frequency (Times):</label>
+              <input type="number" class="form-control" id="frequency" name="frequency" class="w-100" required min="1">
+              <br>
+              <label for="period" class="form-label">Dose Period (Per Day):</label>
+              <input type="number" class="form-control" id="period" name="period" class="w-100" required min="1">
+              <br>
+              <div class="col-12">
+                <button class="btn btn-primary" type="submit">Submit</button>
+              </div>
+            </form>
+          </div>
+          <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="modal-submit-button">Submit</button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
     <h1>Patient: <span id="fullname"></span></h1>
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
+      
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="med-tab" data-bs-toggle="tab" data-bs-target="#med" type="button" role="tab" aria-controls="med" aria-selected="true">Medication</button>
+        <button class="nav-link active" id="med-tab" data-bs-toggle="tab" data-bs-target="#med" type="button" role="tab" aria-controls="med" aria-selected="true">Active Medication</button>
       </li>
+      
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="past-med-tab" data-bs-toggle="tab" data-bs-target="#past-med" type="button" role="tab" aria-controls="past-med" aria-selected="false">Past Medication</button>
+        <button class="nav-link" id="med-search-tab" data-bs-toggle="tab" data-bs-target="#med-search" type="button" role="tab" aria-controls="med-search" aria-selected="false">Add Medication</button>
       </li>
+      
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="past-med-tab" data-bs-toggle="tab" data-bs-target="#past-med" type="button" role="tab" aria-controls="past-med" aria-selected="false">Completed Medication</button>
+      </li>
+      
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="calendar-tab" data-bs-toggle="tab" data-bs-target="#calendar" type="button" role="tab" aria-controls="calendar" aria-selected="false">Calendar</button>
+      </li>
+      
       <li class="nav-item" role="presentation">
         <button class="nav-link position-relative" id="interaction-tab" data-bs-toggle="tab" data-bs-target="#interaction" type="button" role="tab" aria-controls="interaction" aria-selected="false">
           Interaction
@@ -38,8 +100,10 @@
         </button>
       </li>
 
+
     </ul>
     <div class="tab-content" id="myTabContent">
+      
       <div class="tab-pane fade show active" id="med" role="tabpanel" aria-labelledby="med-tab">
         <table id="medicationTable" class="table table-striped">
           <tr>
@@ -47,20 +111,38 @@
             <th>Quantity</th>
             <th>Direction</th>
             <th>Duration</th>
+            <th>Expiration</th>
+            <th>Delete</th>
           </tr>
         </table>
       </div>
+
+      <div class="tab-pane fade" id="med-search" role="tabpanel" aria-labelledby="med-search-tab">
+        <form id="search-form">
+          <input type="text" id="search-input" placeholder="(e.g. advil)">
+          <button type="submit">Search</button>
+        </form>
+        <!-- <div id="result-list"></div> -->
+        <ul id="result-list"></ul>
+      </div>
+
       <div class="tab-pane fade" id="past-med" role="tabpanel" aria-labelledby="past-med-tab">
-        <table id="pastMedTable" class="table table-striped">
+        <table id="inactiveMedTable" class="table table-striped">
           <tr>
             <th>Medication</th>
-            <th>Expiered On</th>
+            <th>Status</th>
           </tr>
         </table>
       </div>
+      
+      <div class="tab-pane fade" id="calendar" role="tabpanel" aria-labelledby="calendar-tab">
+        <div id='calendar'></div>
+      </div> 
+      
       <div class="tab-pane fade" id="interaction" role="tabpanel" aria-labelledby="interaction-tab">
         <ul id="interactionList"></ul>
-      </div>    
+      </div> 
+      
     </div>
 
     <!-- Required JS files to enable this page to embed within an MPage -->
@@ -95,5 +177,7 @@
         }
       );
     </script>
+    <script src="src/js/med-search.js"></script>
+    <script src="src/js/delete.js"></script>
   </body>
 </html>

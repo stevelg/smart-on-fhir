@@ -1,7 +1,8 @@
+var smartClient;
+
 (function(window){
   window.extractData = function() {
     var ret = $.Deferred();
-
     function onError() {
       console.log('Loading error', arguments);
       ret.reject();
@@ -9,12 +10,14 @@
 
     function onReady(smart)  {
       if (smart.hasOwnProperty('patient')) {
+        smartClient = smart;
         var patient = smart.patient;
         var pt = patient.read();
 
         var med = smart.patient.api.fetchAll({
           type: 'MedicationOrder', // Use 'MedicationOrder' for DSTU2
         });
+
         $.when(pt, med).fail(onError);
 
         $.when(pt, med).done(function(patient, med) {
@@ -27,6 +30,9 @@
             lname = patient.name[0].family.join(' ');
           }
 
+          // console.log(med);
+          // console.log(patient);
+          window.patientID = patient.id;
           var p = defaultPatient();
           p.medicationOrders = med;
           p.birthdate = patient.birthDate;
@@ -34,10 +40,12 @@
           p.fname = fname;
           p.lname = lname;
 
+          
 
           // Get list of prescribed medication
           med.forEach(function(medicationOrder) {
-          p.prescribedMedication.push(medicationOrder.medicationCodeableConcept.coding[0].code);
+            // console.log(medicationOrder);
+            p.prescribedMedication.push(medicationOrder.medicationCodeableConcept.coding[0].code);
           });
 
           var prescribedMedicationList = p.prescribedMedication;
@@ -61,7 +69,7 @@
             p.interactingDrugs.forEach(function(interactingDrug) {
               var li = document.createElement("li");
               li.textContent = interactingDrug;
-              console.log(interactingDrug);
+              // console.log(interactingDrug);
               document.getElementById("interactionList").appendChild(li);
             });
           }).catch(function(error) {
@@ -112,7 +120,6 @@
   window.drawVisualization = function(p) {
     document.getElementById("interactionBadge").style.display = "none";
 
-
     $('#holder').show();
     $('#loading').hide();
     $('#fname').html(p.fname); 
@@ -122,41 +129,68 @@
     $('#birthdate').html(p.birthdate);
 
     p.medicationOrders.forEach(function(medicationOrder) {
-      var startDate = new Date(medicationOrder.dosageInstruction[0].timing.repeat.boundsPeriod.start);
-      var supplyDurationDays = medicationOrder.dispenseRequest.expectedSupplyDuration.value;
-      
-      // Add the supply duration to the start date to get the approximate expiration date
-      var expirationDate = new Date(startDate.getTime() + supplyDurationDays * 24 * 60 * 60 * 1000);
-      
-      console.log(expirationDate);
-      
+      var medicationStatus = medicationOrder.status;
       var medicationName = medicationOrder.medicationCodeableConcept.text;
-      var medicationQuantity = medicationOrder.dispenseRequest.quantity.value + ' ' + medicationOrder.dispenseRequest.quantity.unit.replace(/{|}/g, '');
-      var medicationDirection = medicationOrder.dosageInstruction[0].text;
-      var medicationDuration = medicationOrder.dispenseRequest.expectedSupplyDuration.value + ' ' + medicationOrder.dispenseRequest.expectedSupplyDuration.unit.replace(/{|}/g, '');
-      var html = `
-        <tr>
-          <td>${medicationName}</td>
-          <td>${medicationQuantity}</td>
-          <td>${medicationDirection}</td>
-          <td>${medicationDuration}</td>
+      console.log(medicationOrder);
+      if (!medicationOrder.dosageInstruction[0]
+        || !medicationOrder.dosageInstruction[0].timing
+        || !medicationOrder.dosageInstruction[0].doseQuantity
+        || !medicationOrder.dosageInstruction[0].timing.repeat.period
+        || !medicationOrder.dosageInstruction[0].timing.repeat.frequency
+        || !medicationOrder.dosageInstruction[0].timing.repeat.boundsPeriod.start
+        || !medicationOrder.dosageInstruction[0].doseQuantity.value
+        || !medicationOrder.dosageInstruction[0].doseQuantity.unit
+        || !medicationOrder.dispenseRequest.expectedSupplyDuration.value){
+          if (medicationStatus == 'active') medicationStatus = 'expired';
+          var html = 
+          `
+          <tr>
+            <td>${medicationName}</td>
+            <td>${medicationStatus}</td>
           </tr>
-      `;
-      $('#medicationTable').append(html);
+          `;
+          $('#inactiveMedTable').append(html);
+        } else {
+          const startDate = new Date(medicationOrder.dosageInstruction[0].timing.repeat.boundsPeriod.start);
+          const expectedSupplyDuration = medicationOrder.dispenseRequest.expectedSupplyDuration.value;
+          const expirationDate = new Date(startDate.getTime() + expectedSupplyDuration * 24 * 60 * 60 * 1000);
+          //display past medications
+          var currentDate = new Date();
 
-      //display past medications
-      var currentDate = new Date();
-      if (expirationDate.getTime() < currentDate.getTime()) {
-        var html = `
-        <tr>
-          <td>${medicationName}</td>
-          <td>${expirationDate.toLocaleDateString()}</td>
-        </tr>
-      `;
-      $('#pastMedTable').append(html);      } 
-
-
+          if (expirationDate.getTime() < currentDate.getTime()) {
+            medicationStatus = 'expired';
+            var html = 
+            `
+            <tr>
+              <td>${medicationName}</td>
+              <td>${medicationStatus}</td>
+            </tr>
+            `;
+            $('#inactiveMedTable').append(html);
+          } else {
+            var medicationQuantity = 
+                        medicationOrder.dosageInstruction[0].doseQuantity.value 
+                        + ' ' 
+                        + medicationOrder.dosageInstruction[0].doseQuantity.unit.replace(/{|}/g, '');
+            var medicationDirection = 
+                        medicationOrder.dosageInstruction[0].timing.repeat.frequency
+                        + ' time(s) per ' 
+                        + medicationOrder.dosageInstruction[0].timing.repeat.period
+                        + ' day(s)';
+            var html = 
+            `
+              <tr>
+                <td>${medicationName}</td>
+                <td>${medicationQuantity}</td>
+                <td>${medicationDirection}</td>
+                <td>${expectedSupplyDuration + ' days'}</td>
+                <td>${expirationDate.toDateString()}</td>
+                <td><button type="button" class="btn btn btn-outline-danger" id="${medicationOrder.id}">Delete</button></td>
+              </tr>
+            `;
+            $('#medicationTable').append(html);
+          }
+        }
     });
   };
-
 })(window);
