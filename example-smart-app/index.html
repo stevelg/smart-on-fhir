@@ -1,20 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
-    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-    <title>Medication-SMART-App-stevelg</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-    <link rel='stylesheet' type='text/css' href='./src/css/example-smart-app.css'>
-    <!--
-      Temporarily disable cerner-smart-embeddable-lib
-      <link rel='stylesheet' type='text/css' href='./lib/css/cerner-smart-embeddable-lib-1.0.0.min.css'>
-    -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>medmanage-stevelg</title>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const calendarEl = document.getElementById("calendar");
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: "dayGridMonth",
+          // initialView: "listWeek",
+        });
+        calendar.render();
+        
+        window.myCalendar = calendar;
+      });
+    </script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" type="text/css" href="./src/css/example-smart-app.css" />
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css" />
   </head>
   <body>
-    <div id='errors'>
-    </div>
+    <div id="errors"></div>
     <div id="loading" class="spinner">
       <div class="bounce1"></div>
       <div class="bounce2"></div>
@@ -31,32 +45,46 @@
           </div>
           <div class="modal-body">
             <form id="medication-order-form">
-              <input type="hidden" id="rxcui-field" name="rxcui">
+              <input type="hidden" id="rxcui-field" name="rxcui" />
 
               <label for="drug" class="form-label">Drug:</label>
-              <input type="text" class="form-control" id="drug" name="drug" class="w-100" required readonly>
-              <br>
+              <input type="text" class="form-control" id="drug" name="drug" class="w-100" required readonly />
+              <br />
               <label for="patientID" class="form-label">Patient ID:</label>
-              <input type="text" class="form-control" id="patientID" name="patientID" class="w-100" required readonly>
-              <br>
+              <input type="text" class="form-control" id="patientID" name="patientID" class="w-100" required readonly />
+              <br />
               <label for="start-date" class="form-label">Start Date:</label>
-              <input type="date" class="form-control" id="start-date" name="start-date" class="w-100" required>
-              <br>
+              <input type="date" class="form-control" id="start-date" name="start-date" class="w-100" required />
+              <br />
               <label for="dispense-quantity" class="form-label">Dispense Quantity:</label>
-              <input type="number" class="form-control" id="dispense-quantity" name="dispense-quantity" class="w-100" required min="1">
-              <br>
-              <label for="dose-quantity" class="form-label">Dose Quantity:</label>
-              <input type="number" class="form-control" id="dose-quantity" name="dose-quantity" class="w-100" required min="1">
+              <input type="number" class="form-control" id="dispense-quantity" name="dispense-quantity" class="w-100" required min="1" placeholder="How many tablets/capsules/vial/... total?" />
+              <br />
+              <!-- <label for="dose-quantity" class="form-label">Dose Quantity:</label>
+              <input type="number" class="form-control" id="dose-quantity" name="dose-quantity" class="w-100" required min="1" placeholder="e.g. 2 (tablets per dose)">
               <br>
               <label for="dose-unit" class="form-label">Dose Unit:</label>
-              <input type="text" class="form-control" id="dose-unit" name="dose-unit" class="w-100" required min="1">
+              <input type="text" class="form-control" id="dose-unit" name="dose-unit" class="w-100" required min="1" placeholder="e.g. Tablet, Pack, Vial, etc.">
               <br>
               <label for="frequency" class="form-label">Dose Frequency (Times):</label>
-              <input type="number" class="form-control" id="frequency" name="frequency" class="w-100" required min="1">
+              <input type="number" class="form-control" id="frequency" name="frequency" class="w-100" required min="1" placeholder="How many dose per day?">
               <br>
               <label for="period" class="form-label">Dose Period (Per Day):</label>
-              <input type="number" class="form-control" id="period" name="period" class="w-100" required min="1">
-              <br>
+              <input type="number" class="form-control" id="period" name="period" class="w-100" required min="1" placeholder="How many days per week?">
+              <br> -->
+              <label for="dose-quantity" class="form-label">Dose Quantity and Unit</label>
+              <div class="input-group mb-3">
+                <input type="number" class="form-control" aria-label="dose-quantity" id="dose-quantity" name="dose-quantity" min="1" placeholder="#" />
+                <input type="text" class="form-control" aria-label="dose-unit" id="dose-unit" name="dose-unit" required placeholder="Tablet/Capsule/.." />
+                <span class="input-group-text">Per Dose</span>
+              </div>
+              <label for="frequency" class="form-label">Frequency and Period</label>
+              <div class="input-group mb-3">
+                <input type="number" class="form-control" aria-label="frequency" id="frequency" name="frequency" required min="1" placeholder="#" />
+                <span class="input-group-text">Doses</span>
+                <span class="input-group-text">Every</span>
+                <input type="number" class="form-control" aria-label="period" id="period" name="period" required min="1" placeholder="#" />
+                <span class="input-group-text">Days</span>
+              </div>
               <div class="col-12">
                 <button class="btn btn-primary" type="submit">Submit</button>
               </div>
@@ -74,23 +102,22 @@
     <h1>Patient: <span id="fullname"></span></h1>
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
-      
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="med-tab" data-bs-toggle="tab" data-bs-target="#med" type="button" role="tab" aria-controls="med" aria-selected="true">Active Medication</button>
+        <button class="nav-link" id="med-tab" data-bs-toggle="tab" data-bs-target="#med" type="button" role="tab" aria-controls="med" aria-selected="false">Active Medication</button>
       </li>
-      
+
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="med-search-tab" data-bs-toggle="tab" data-bs-target="#med-search" type="button" role="tab" aria-controls="med-search" aria-selected="false">Add Medication</button>
       </li>
-      
+
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="past-med-tab" data-bs-toggle="tab" data-bs-target="#past-med" type="button" role="tab" aria-controls="past-med" aria-selected="false">Completed Medication</button>
       </li>
-      
+
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="calendar-tab" data-bs-toggle="tab" data-bs-target="#calendar" type="button" role="tab" aria-controls="calendar" aria-selected="false">Calendar</button>
+        <button class="nav-link active" id="calendar-tab" data-bs-toggle="tab" data-bs-target="#calendar" type="button" role="tab" aria-controls="calendar" aria-selected="true">Calendar</button>
       </li>
-      
+
       <li class="nav-item" role="presentation">
         <button class="nav-link position-relative" id="interaction-tab" data-bs-toggle="tab" data-bs-target="#interaction" type="button" role="tab" aria-controls="interaction" aria-selected="false">
           Interaction
@@ -99,12 +126,9 @@
           </span>
         </button>
       </li>
-
-
     </ul>
     <div class="tab-content" id="myTabContent">
-      
-      <div class="tab-pane fade show active" id="med" role="tabpanel" aria-labelledby="med-tab">
+      <div class="tab-pane fade" id="med" role="tabpanel" aria-labelledby="med-tab">
         <table id="medicationTable" class="table table-striped">
           <tr>
             <th>Medication</th>
@@ -119,7 +143,7 @@
 
       <div class="tab-pane fade" id="med-search" role="tabpanel" aria-labelledby="med-search-tab">
         <form id="search-form">
-          <input type="text" id="search-input" placeholder="(e.g. advil)">
+          <input type="text" id="search-input" placeholder="(e.g. advil)" />
           <button type="submit">Search</button>
         </form>
         <!-- <div id="result-list"></div> -->
@@ -134,46 +158,38 @@
           </tr>
         </table>
       </div>
-      
-      <div class="tab-pane fade" id="calendar" role="tabpanel" aria-labelledby="calendar-tab">
-        <div id='calendar'></div>
-      </div> 
-      
+
+      <div class="tab-pane fade show active" id="calendar" role="tabpanel" aria-labelledby="calendar-tab">
+        <div id="calendar"></div>
+      </div>
+
       <div class="tab-pane fade" id="interaction" role="tabpanel" aria-labelledby="interaction-tab">
         <ul id="interactionList"></ul>
-      </div> 
-      
+      </div>
     </div>
 
-    <!-- Required JS files to enable this page to embed within an MPage -->
-    <!--
-      Temporarily disable cerner-smart-embeddable-lib
-      <script src='https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js'></script>
-      <script src='./lib/js/cerner-smart-embeddable-lib-1.0.0.min.js'></script>
-    -->
-
     <!-- Application-level javascript-->
-    <script src='./src/js/example-smart-app.js'></script>
+    <script src="./src/js/example-smart-app.js"></script>
 
     <!-- FHIR Client JS Library -->
-    <script src='./lib/js/fhir-client-v0.1.12.js'></script>
+    <script src="./lib/js/fhir-client-v0.1.12.js"></script>
 
     <!-- Prevent session bleed caused by single threaded embedded browser and sessionStorage API -->
     <!-- https://github.com/cerner/fhir-client-cerner-additions -->
-    <script src='./lib/js/fhir-client-cerner-additions-1.0.0.js'></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="./lib/js/fhir-client-cerner-additions-1.0.0.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>
       extractData().then(
         //Display Patient Demographics and Observations if extractData was success
-        function(p) {
+        function (p) {
           drawVisualization(p);
         },
 
         //Display 'Failed to call FHIR Service' if extractData failed
-        function() {
-          $('#loading').hide();
-          $('#errors').html('<p> Failed to call FHIR Service </p>');
+        function () {
+          $("#loading").hide();
+          $("#errors").html("<p> Failed to call FHIR Service </p>");
         }
       );
     </script>

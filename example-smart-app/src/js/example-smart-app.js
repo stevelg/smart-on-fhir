@@ -103,7 +103,11 @@ var smartClient;
     return interactingDrug;
   }
     
-
+  function addDays(dateStr, days) {
+    var date = new Date(dateStr);
+    date.setDate(date.getDate() + days);
+    return date;
+  }
 
   function defaultPatient(){
     return {
@@ -132,7 +136,8 @@ var smartClient;
       var medicationStatus = medicationOrder.status;
       var medicationName = medicationOrder.medicationCodeableConcept.text;
       console.log(medicationOrder);
-      if (!medicationOrder.dosageInstruction[0]
+      if (!medicationOrder.dosageInstruction
+        || !medicationOrder.dosageInstruction[0]
         || !medicationOrder.dosageInstruction[0].timing
         || !medicationOrder.dosageInstruction[0].doseQuantity
         || !medicationOrder.dosageInstruction[0].timing.repeat.period
@@ -189,6 +194,13 @@ var smartClient;
               </tr>
             `;
             $('#medicationTable').append(html);
+
+            window.myCalendar.addEvent({
+              title: medicationName + ' ' + medicationQuantity + ' ' + medicationDirection,
+              start: medicationOrder.dosageInstruction[0].timing.repeat.boundsPeriod.start,
+              end: addDays(medicationOrder.dosageInstruction[0].timing.repeat.boundsPeriod.start, expectedSupplyDuration),
+              allDay: true,
+            })
           }
         }
     });

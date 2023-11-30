@@ -130,7 +130,7 @@ form.addEventListener('submit', function(event) {
     }
   }
   
-  // console.log(medicationOrder);
+  console.log(medicationOrder);
 
   // Submit the medication order
   smartClient.patient.api.create({
@@ -141,7 +141,7 @@ form.addEventListener('submit', function(event) {
     // Switch to the active medication tab
     setTimeout(function(){ 
       document.getElementById('med-tab').click();
-      location.reload();
+      // location.reload();
     }, 1000);
     // location.reload();
   }, function(error) {
