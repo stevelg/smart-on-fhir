@@ -8,12 +8,18 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const calendarEl = document.getElementById("calendar");
+        const calendarEl2 = document.getElementById("calendar-day");
         const calendar = new FullCalendar.Calendar(calendarEl, {
           initialView: "dayGridMonth",
           // initialView: "listWeek",
         });
+        const calendarDay = new FullCalendar.Calendar(calendarEl2, {
+          // initialView: "dayGridMonth",
+          initialView: "listWeek",
+        });
         calendar.render();
-        
+        calendarDay.render();
+
         window.myCalendar = calendar;
       });
     </script>
@@ -33,6 +39,11 @@
       <div class="bounce1"></div>
       <div class="bounce2"></div>
       <div class="bounce3"></div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; height: 100vh; width: 100vw; background: rgba(0, 0, 0, 0.5); z-index: 9999">
+      <img src="src/images/Loading.gif" alt="Loading..." style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)" />
     </div>
 
     <!-- Modal -->
@@ -111,11 +122,15 @@
       </li>
 
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="past-med-tab" data-bs-toggle="tab" data-bs-target="#past-med" type="button" role="tab" aria-controls="past-med" aria-selected="false">Completed Medication</button>
+        <button class="nav-link" id="past-med-tab" data-bs-toggle="tab" data-bs-target="#past-med" type="button" role="tab" aria-controls="past-med" aria-selected="false">Inactive Medication</button>
       </li>
 
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="calendar-tab" data-bs-toggle="tab" data-bs-target="#calendar" type="button" role="tab" aria-controls="calendar" aria-selected="true">Calendar</button>
+      </li>
+
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="calendar-day-tab" data-bs-toggle="tab" data-bs-target="#calendar-day" type="button" role="tab" aria-controls="calendar-day" aria-selected="false">Calendar</button>
       </li>
 
       <li class="nav-item" role="presentation">
@@ -161,6 +176,10 @@
 
       <div class="tab-pane fade show active" id="calendar" role="tabpanel" aria-labelledby="calendar-tab">
         <div id="calendar"></div>
+      </div>
+
+      <div class="tab-pane fade show" id="calendar-day" role="tabpanel" aria-labelledby="calendar-day-tab">
+        <div id="calendar-day"></div>
       </div>
 
       <div class="tab-pane fade" id="interaction" role="tabpanel" aria-labelledby="interaction-tab">
